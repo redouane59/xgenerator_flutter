@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'PropositionButton.dart';
 import 'AutocompleteComponent.dart';
+import 'ResultPage.dart';
 
 class QuestionComponent extends StatefulWidget {
   final List<dynamic> questionData;
   final bool isQuizz;
+  final String csvContent;
 
   const QuestionComponent({
     Key? key,
     required this.questionData,
     required this.isQuizz,
+    required this.csvContent,
   }) : super(key: key);
 
   @override
@@ -18,21 +21,57 @@ class QuestionComponent extends StatefulWidget {
 
 class _QuestionComponentState extends State<QuestionComponent> {
   int currentQuestionIndex = 0;
+  int score = 0;
+  List<dynamic> wrongQuestions = [];
+  List<Color> buttonColors = [];
+  bool isWrong = false;
 
   @override
   void initState() {
     super.initState();
+    initButtonColors();
+  }
+
+  void initButtonColors(){
+    buttonColors = List.filled(widget.questionData[0]['propositions'].length, Colors.lightBlue);
   }
 
   Map<String, dynamic> getCurrentQuestionData() {
-    return widget.questionData[currentQuestionIndex];
+      return widget.questionData[currentQuestionIndex];
   }
 
-  void checkAnswer(String expected, String actual) {
-    print('index: $currentQuestionIndex');
-    if (expected == actual) {
-      setState(() { currentQuestionIndex++; });
+  void checkAnswer(String expected, String actual, int buttonIndex) {
+    bool isCorrect = (expected == actual);
+    if (isCorrect) {
+      setState(() {
+        currentQuestionIndex++;
+        score++;
+        initButtonColors();
+      });
+      if (currentQuestionIndex == widget.questionData.length) {
+        setState(() {
+          currentQuestionIndex--;
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResultPage(
+              score: score,
+              questionCount: widget.questionData.length,
+              wrongQuestions: wrongQuestions,
+              csvContent: widget.csvContent,
+            ),
+          ),
+        );
+      }
     } else {
+      score--;
+      wrongQuestions.add(getCurrentQuestionData());
+
+      // Change the color of the button with the wrong answer
+      setState(() {
+        buttonColors[buttonIndex] = Colors.red;
+      });
     }
   }
 
@@ -43,10 +82,9 @@ class _QuestionComponentState extends State<QuestionComponent> {
   }
 
   List<String> getPropositions() {
-    print('getPropositions()');
     var propositions = getCurrentQuestionData()['propositions'];
-    return List<String>.from(propositions.map((prop) => prop['output']).toList())
-      ..shuffle();
+    return List<String>.from(propositions.map((prop) => prop['output']).toList());
+ //     ..shuffle();
   }
 
   @override
@@ -70,7 +108,8 @@ class _QuestionComponentState extends State<QuestionComponent> {
             ? PropositionButton(
           propositions: getPropositions(),
           getCurrentQuestionData: getCurrentQuestionData,
-          checkAnswer: checkAnswer,
+            buttonColors: buttonColors,
+          checkAnswer: checkAnswer
         )
             : AutocompleteComponent(
 

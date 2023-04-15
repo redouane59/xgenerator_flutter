@@ -3,7 +3,6 @@ import 'package:dio/src/form_data.dart';
 import 'package:flutter/material.dart';
 import 'FreeTextComponent.dart';
 import 'FileInputComponent.dart';
-import 'PlayButtons.dart';
 import 'SelectFileList.dart';
 
 void main() {
@@ -23,9 +22,10 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/',
       home: Scaffold(
         appBar: AppBar(
-          title: Text('My App'),
+          title: Text('Train Me!'),
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: [
@@ -63,3 +63,4 @@ class _MyAppState extends State<MyApp> {
 
 
 }
+

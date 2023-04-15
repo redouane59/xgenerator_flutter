@@ -38,7 +38,7 @@ class PlayButtons extends StatelessWidget {
     if (kDebugMode) {
       rootUrl = 'http://localhost:8080';
     }
-    int questionCount = 20;
+    int questionCount = 5;
     Null type = null;
 // &type=$type
     String url = '$rootUrl?question_count=$questionCount&delimiter=${Uri
@@ -78,6 +78,7 @@ class PlayButtons extends StatelessWidget {
           builder: (context) => QuestionComponent(
             questionData: jsonResponse["questions"],
             isQuizz: isQuizz,
+            csvContent: csvContent,
           ),
         ),
       );
