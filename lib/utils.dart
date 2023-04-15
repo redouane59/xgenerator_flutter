@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:http/http.dart' as http;
+
 String detectDelimiter(String text) {
   final delimiters = [",", ";", "\t"];
   var maxDelimiters = 0;
@@ -10,4 +13,23 @@ String detectDelimiter(String text) {
     }
   }
   return detectedDelimiter;
+}
+
+String getDelimiterCharacter(String delimiterLabel) {
+  String delimiterChar;
+  switch (delimiterLabel) {
+    case "Comma (,)":
+      delimiterChar = ",";
+      break;
+    case "Semicolon (;)":
+      delimiterChar = ";";
+      break;
+    case "Tab (\\t)":
+      delimiterChar = "\t";
+      break;
+    default:
+      delimiterChar = ",";
+      break;
+  }
+  return delimiterChar;
 }
