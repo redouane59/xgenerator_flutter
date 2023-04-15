@@ -16,6 +16,11 @@ class PlayButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       child: Text(buttonText),
+      style: ButtonStyle(
+        minimumSize: MaterialStateProperty.all(
+          Size(MediaQuery.of(context).size.width * 0.4, 50),
+        ),
+      ),
     );
   }
 }

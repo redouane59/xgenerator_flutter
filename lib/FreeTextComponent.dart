@@ -1,11 +1,10 @@
-import 'package:dio/dio.dart';
+import 'dart:async' show Future;
 
 import 'package:flutter/material.dart';
-import 'utils.dart';
-import 'package:namer_app/PlayButtons.dart';
-import 'dart:async' show Future;
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:http/http.dart' as http;
+import 'package:namer_app/PlayButtons.dart';
+
+import 'utils.dart';
 
 class FreeTextComponent extends StatefulWidget {
   @override
@@ -18,7 +17,6 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
   List<String> delimiterItems = ['Comma (,)', 'Semicolon (;)', 'Tab (\\t)'];
   String detectedDelimiter = '';
 
-
   @override
   void initState() {
     super.initState();
@@ -27,7 +25,7 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
         csvContent = value;
         detectedDelimiter = detectDelimiter(value);
         delimiterString = delimiterItems.firstWhere(
-              (element) => getDelimiterCharacter(element) == detectedDelimiter,
+          (element) => getDelimiterCharacter(element) == detectedDelimiter,
           orElse: () => delimiterString,
         );
       });
@@ -43,7 +41,7 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
       csvContent = value;
       detectedDelimiter = detectDelimiter(value);
       delimiterString = delimiterItems.firstWhere(
-            (element) => getDelimiterCharacter(element) == detectedDelimiter,
+        (element) => getDelimiterCharacter(element) == detectedDelimiter,
         orElse: () => delimiterString,
       );
     });
@@ -60,7 +58,7 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -113,7 +111,7 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
                       });
                     },
                     items: delimiterItems.map<DropdownMenuItem<String>>(
-                          (String value) {
+                      (String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
@@ -148,5 +146,4 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
       ),
     );
   }
-
 }

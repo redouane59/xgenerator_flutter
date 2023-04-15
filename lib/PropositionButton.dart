@@ -38,7 +38,7 @@ class PropositionButton extends StatelessWidget {
                 fixedSize: MaterialStateProperty.all<Size>(
                   Size(double.infinity, 50),
                 ),
-                minimumSize: MaterialStateProperty.all(Size(200, 0)),
+                minimumSize: MaterialStateProperty.all(Size(300, 0)),
                 backgroundColor: MaterialStateProperty.all<Color>(
                   buttonColors[index],
                 ),

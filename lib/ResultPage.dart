@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/PlayButtons.dart';
-import 'main.dart';
+
 import 'QuestionComponent.dart';
+import 'main.dart';
 
 class ResultPage extends StatelessWidget {
   final int score;
@@ -9,7 +10,9 @@ class ResultPage extends StatelessWidget {
   List<dynamic> wrongQuestions;
   final String csvContent;
 
-  ResultPage({required this.score, required this.questionCount,
+  ResultPage({
+    required this.score,
+    required this.questionCount,
     required this.wrongQuestions,
     required this.csvContent,
   });
@@ -38,22 +41,22 @@ class ResultPage extends StatelessWidget {
             SizedBox(height: 16),
             if (wrongQuestions.isNotEmpty)
               ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => QuestionComponent(
-                      questionData: wrongQuestions,
-                      isQuizz: true,
-                      csvContent: csvContent,
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QuestionComponent(
+                        questionData: wrongQuestions,
+                        isQuizz: true,
+                        csvContent: csvContent,
+                        allOuputs: [], // @todo to fix
+                      ),
                     ),
-                  ),
-                );
-              },
-              child: Text('Play (Correction)'),
-            ),
-            if (!wrongQuestions.isNotEmpty)
-              PlayButtons(csvContent: csvContent)
+                  );
+                },
+                child: Text('Play (Correction)'),
+              ),
+            if (!wrongQuestions.isNotEmpty) PlayButtons(csvContent: csvContent)
           ],
         ),
       ),

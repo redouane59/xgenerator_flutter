@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'package:dio/dio.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
 import 'PlayButton.dart';
 import 'QuestionComponent.dart';
 
@@ -33,16 +34,29 @@ class PlayButtons extends StatelessWidget {
     );
   }
 
-  Future<Map<String, dynamic>?> callApi(String csvContent, String delimiter) async {
-    String rootUrl = 'https://us-central1-dz-dialect-api.cloudfunctions.net/generate-question-function';
+  List<String> getAllOutputs(String csvContent, String delimiter) {
+    final lines = csvContent.split('\n');
+    final questionData = lines
+        .map(
+            (line) => line.split(delimiter).map((cell) => cell.trim()).toList())
+        .toList();
+    final outputs =
+        questionData.map((question) => question[1]).toList().skip(1);
+    return outputs.cast<String>().toList();
+  }
+
+  Future<Map<String, dynamic>?> callApi(
+      String csvContent, String delimiter) async {
+    String rootUrl =
+        'https://us-central1-dz-dialect-api.cloudfunctions.net/generate-question-function';
     if (kDebugMode) {
       rootUrl = 'http://localhost:8080';
     }
     int questionCount = 5;
     Null type = null;
 // &type=$type
-    String url = '$rootUrl?question_count=$questionCount&delimiter=${Uri
-        .encodeComponent(delimiter)}';
+    String url =
+        '$rootUrl?question_count=$questionCount&delimiter=${Uri.encodeComponent(delimiter)}';
     print('calling URL $url');
 
     try {
@@ -70,7 +84,8 @@ class PlayButtons extends StatelessWidget {
   }
 
   void onPlayButtonPressed(BuildContext context, bool isQuizz) async {
-    final jsonResponse = await callApi(csvContent, ',');
+    String delimiter = ','; // @todo to change
+    final jsonResponse = await callApi(csvContent, delimiter);
     if (jsonResponse != null) {
       Navigator.push(
         context,
@@ -79,10 +94,10 @@ class PlayButtons extends StatelessWidget {
             questionData: jsonResponse["questions"],
             isQuizz: isQuizz,
             csvContent: csvContent,
+            allOuputs: getAllOutputs(csvContent, delimiter),
           ),
         ),
       );
     }
   }
-
 }
