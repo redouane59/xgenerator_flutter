@@ -25,7 +25,7 @@ class QuestionComponent extends StatefulWidget {
 class _QuestionComponentState extends State<QuestionComponent> {
   int currentQuestionIndex = 0;
   int score = 0;
-  List<dynamic> wrongQuestions = [];
+  Set<dynamic> wrongQuestions = new Set();
   List<Color> buttonColors = [];
   bool isWrong = false;
 
@@ -44,10 +44,9 @@ class _QuestionComponentState extends State<QuestionComponent> {
     return widget.questionData[currentQuestionIndex];
   }
 
-  void checkAnswer(String expected, String actual, int buttonIndex) {
+  bool checkAnswer(String expected, String actual, int buttonIndex) {
     bool isCorrect = (expected == actual);
     if (isCorrect) {
-      print('check answer correct');
       setState(() {
         currentQuestionIndex++;
         score++;
@@ -60,28 +59,29 @@ class _QuestionComponentState extends State<QuestionComponent> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                ResultPage(
-                  score: score,
-                  questionCount: widget.questionData.length,
-                  wrongQuestions: wrongQuestions,
-                  csvContent: widget.csvContent,
-                ),
+            builder: (context) => ResultPage(
+              score: score,
+              questionCount: widget.questionData.length,
+              wrongQuestions: wrongQuestions,
+              csvContent: widget.csvContent,
+            ),
           ),
         );
       }
     } else {
-      print('check answer incorrect');
       score--;
       wrongQuestions.add(getCurrentQuestionData());
 
-      if (buttonIndex > 0) {
+      if (buttonIndex >= 0) {
         // Change the color of the button with the wrong answer
         setState(() {
           buttonColors[buttonIndex] = Colors.red;
         });
+      } else {
+        print('no button Index');
       }
     }
+    return isCorrect;
   }
 
   void skipQuestion() {
@@ -125,14 +125,15 @@ class _QuestionComponentState extends State<QuestionComponent> {
               ),
               widget.isQuizz
                   ? PropositionButton(
-                  propositions: getPropositions(),
-                  getCurrentQuestionData: getCurrentQuestionData,
-                  buttonColors: buttonColors,
-                  checkAnswer: checkAnswer)
+                      propositions: getPropositions(),
+                      getCurrentQuestionData: getCurrentQuestionData,
+                      buttonColors: buttonColors,
+                      checkAnswer: checkAnswer)
                   : AutocompleteComponent(
-                  autocompleteItems: widget.allOuputs,
-                  getCurrentQuestionData: getCurrentQuestionData,
-                  checkAnswer: checkAnswer),
+                      autocompleteItems: widget.allOuputs,
+                      getCurrentQuestionData: getCurrentQuestionData,
+                      checkAnswer: checkAnswer,
+                      onSkip: skipQuestion),
             ],
           ),
         ),

@@ -7,7 +7,7 @@ import 'main.dart';
 class ResultPage extends StatelessWidget {
   final int score;
   final int questionCount;
-  List<dynamic> wrongQuestions;
+  Set<dynamic> wrongQuestions;
   final String csvContent;
 
   ResultPage({
@@ -46,7 +46,7 @@ class ResultPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => QuestionComponent(
-                        questionData: wrongQuestions,
+                        questionData: List.of(wrongQuestions),
                         isQuizz: true,
                         csvContent: csvContent,
                         allOuputs: [], // @todo to fix

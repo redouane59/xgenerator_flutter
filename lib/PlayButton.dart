@@ -18,7 +18,7 @@ class PlayButton extends StatelessWidget {
       child: Text(buttonText),
       style: ButtonStyle(
         minimumSize: MaterialStateProperty.all(
-          Size(MediaQuery.of(context).size.width * 0.4, 50),
+          Size(MediaQuery.of(context).size.width * 0.3, 50),
         ),
       ),
     );

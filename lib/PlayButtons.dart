@@ -7,10 +7,18 @@ import 'package:http/http.dart' as http;
 import 'PlayButton.dart';
 import 'QuestionComponent.dart';
 
-class PlayButtons extends StatelessWidget {
+class PlayButtons extends StatefulWidget {
   final String csvContent;
 
   PlayButtons({required this.csvContent});
+
+  @override
+  _PlayButtonsState createState() => _PlayButtonsState();
+}
+
+class _PlayButtonsState extends State<PlayButtons> {
+  String questionCount = '5';
+  List<String> questionCountOptions = ['5', '10', '20', 'ALL'];
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +26,24 @@ class PlayButtons extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          DropdownButton<String>(
+            value: questionCount,
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                setState(() {
+                  questionCount = newValue;
+                });
+              }
+            },
+            items: questionCountOptions
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+          SizedBox(width: 16.0),
           PlayButton(
             buttonText: 'Play (Quizz)',
             isQuizz: true,
@@ -40,8 +66,7 @@ class PlayButtons extends StatelessWidget {
         .map(
             (line) => line.split(delimiter).map((cell) => cell.trim()).toList())
         .toList();
-    final outputs =
-        questionData.map((question) => question[1]).toList().skip(1);
+    final outputs = questionData.map((question) => question[1]).toSet().skip(1);
     return outputs.cast<String>().toList();
   }
 
@@ -52,7 +77,6 @@ class PlayButtons extends StatelessWidget {
     if (kDebugMode) {
       rootUrl = 'http://localhost:8080';
     }
-    int questionCount = 5;
     Null type = null;
 // &type=$type
     String url =
@@ -85,7 +109,7 @@ class PlayButtons extends StatelessWidget {
 
   void onPlayButtonPressed(BuildContext context, bool isQuizz) async {
     String delimiter = ','; // @todo to change
-    final jsonResponse = await callApi(csvContent, delimiter);
+    final jsonResponse = await callApi(widget.csvContent, delimiter);
     if (jsonResponse != null) {
       Navigator.push(
         context,
@@ -93,8 +117,8 @@ class PlayButtons extends StatelessWidget {
           builder: (context) => QuestionComponent(
             questionData: jsonResponse["questions"],
             isQuizz: isQuizz,
-            csvContent: csvContent,
-            allOuputs: getAllOutputs(csvContent, delimiter),
+            csvContent: widget.csvContent,
+            allOuputs: getAllOutputs(widget.csvContent, delimiter),
           ),
         ),
       );
