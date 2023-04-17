@@ -61,40 +61,31 @@ class _FileInputComponentState extends State<FileInputComponent> {
       padding: const EdgeInsets.all(10.0),
       child: Stack(
         children: [
-          // Contenu principal de la page
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                // ...
-                // Le reste du contenu de la page
-                // ...
-                Row(
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: _pickCsvFile,
-                      icon: Icon(Icons.upload_file),
-                      label: Text('Choose a CSV file'),
+          Center(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: _pickCsvFile,
+                    icon: Icon(Icons.upload_file),
+                    label: Text('Choose a CSV file'),
+                  ),
+                  SizedBox(width: 8.0),
+                  Text(
+                    fileName ?? '',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontStyle: FontStyle.italic,
                     ),
-                    SizedBox(width: 8.0),
-                    // Espace entre le bouton et le nom du fichier
-                    Text(
-                      fileName ?? '',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
-
-          // Boutons en bas de la page
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: 100.0, // hauteur des boutons
+              height: 100.0,
               child: PlayButtons(csvContent: csvContent),
             ),
           ),

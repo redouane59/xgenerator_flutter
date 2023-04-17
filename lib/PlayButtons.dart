@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:namer_app/utils.dart';
 
 import 'PlayButton.dart';
 import 'QuestionComponent.dart';
@@ -20,8 +21,42 @@ class _PlayButtonsState extends State<PlayButtons> {
   String questionCount = '5';
   List<String> questionCountOptions = ['5', '10', '20', 'ALL'];
 
+  void showErrorDialog(BuildContext context, String errorDetails) {
+    print('showErrorDialog');
+    print('context $context');
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Processing error"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text("An error occurred during the processing of your file. "
+                    "Please check your file content and its delimiters."),
+                SizedBox(height: 8.0),
+                Text("Error detail :"),
+                Text(errorDetails),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Fermer'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool isCsvEmpty = widget.csvContent.isEmpty;
+
     return Center(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -47,13 +82,23 @@ class _PlayButtonsState extends State<PlayButtons> {
           PlayButton(
             buttonText: 'Play (Quizz)',
             isQuizz: true,
-            onPressed: () => onPlayButtonPressed(context, true),
+            isEnabled: widget.csvContent.isNotEmpty,
+            onPressed: () {
+              if (widget.csvContent.isNotEmpty) {
+                onPlayButtonPressed(context, true);
+              }
+            },
           ),
           SizedBox(width: 16.0),
           PlayButton(
             buttonText: 'Play (Expert)',
             isQuizz: false,
-            onPressed: () => onPlayButtonPressed(context, false),
+            isEnabled: widget.csvContent.isNotEmpty,
+            onPressed: () {
+              if (widget.csvContent.isNotEmpty) {
+                onPlayButtonPressed(context, true);
+              }
+            },
           ),
         ],
       ),
@@ -71,7 +116,7 @@ class _PlayButtonsState extends State<PlayButtons> {
   }
 
   Future<Map<String, dynamic>?> callApi(
-      String csvContent, String delimiter) async {
+      BuildContext context, String csvContent, String delimiter) async {
     String rootUrl =
         'https://us-central1-dz-dialect-api.cloudfunctions.net/generate-question-function';
     if (kDebugMode) {
@@ -95,21 +140,20 @@ class _PlayButtonsState extends State<PlayButtons> {
       final response = await request.send();
       if (response.statusCode != 200) {
         final errorData = json.decode(await response.stream.bytesToString());
-        print("Une erreur s'est produite lors de l'appel à l'API.");
-        print(errorData);
+        showErrorDialog(context, errorData);
         return null;
       }
       final jsonResponse = await response.stream.bytesToString();
       return json.decode(jsonResponse);
     } catch (error) {
-      print(error);
+      showErrorDialog(context, error.toString());
       return null;
     }
   }
 
   void onPlayButtonPressed(BuildContext context, bool isQuizz) async {
-    String delimiter = ','; // @todo to change
-    final jsonResponse = await callApi(widget.csvContent, delimiter);
+    String delimiter = detectDelimiter(widget.csvContent);
+    final jsonResponse = await callApi(context, widget.csvContent, delimiter);
     if (jsonResponse != null) {
       Navigator.push(
         context,
