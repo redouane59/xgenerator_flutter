@@ -96,7 +96,7 @@ class _PlayButtonsState extends State<PlayButtons> {
             isEnabled: widget.csvContent.isNotEmpty,
             onPressed: () {
               if (widget.csvContent.isNotEmpty) {
-                onPlayButtonPressed(context, true);
+                onPlayButtonPressed(context, false);
               }
             },
           ),
@@ -151,6 +151,7 @@ class _PlayButtonsState extends State<PlayButtons> {
     }
   }
 
+  // @todo bug here, is Quizz is always true even clicking on the button where it should be false
   void onPlayButtonPressed(BuildContext context, bool isQuizz) async {
     String delimiter = detectDelimiter(widget.csvContent);
     final jsonResponse = await callApi(context, widget.csvContent, delimiter);

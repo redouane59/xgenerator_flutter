@@ -56,17 +56,7 @@ class _QuestionComponentState extends State<QuestionComponent> {
         setState(() {
           currentQuestionIndex--;
         });
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ResultPage(
-              score: score,
-              questionCount: widget.questionData.length,
-              wrongQuestions: wrongQuestions,
-              csvContent: widget.csvContent,
-            ),
-          ),
-        );
+        showResultPage();
       }
     } else {
       score--;
@@ -84,11 +74,48 @@ class _QuestionComponentState extends State<QuestionComponent> {
     return isCorrect;
   }
 
+  void showResultPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ResultPage(
+          score: score,
+          questionCount: widget.questionData.length,
+          wrongQuestions: wrongQuestions,
+          csvContent: widget.csvContent,
+        ),
+      ),
+    );
+  }
+
   void skipQuestion() {
-    setState(() {
-      currentQuestionIndex =
-          (currentQuestionIndex + 1) % widget.questionData.length;
-    });
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('${getCurrentQuestionData()['expected_word']['input']}'),
+          content:
+              Text('${getCurrentQuestionData()['expected_word']['output']}'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                setState(() {
+                  currentQuestionIndex = (currentQuestionIndex + 1);
+                  if (currentQuestionIndex == widget.questionData.length) {
+                    setState(() {
+                      currentQuestionIndex--;
+                    });
+                    showResultPage();
+                  }
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   List<String> getPropositions() {

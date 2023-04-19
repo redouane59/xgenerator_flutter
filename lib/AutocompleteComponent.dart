@@ -28,7 +28,6 @@ class _AutocompleteComponentState extends State<AutocompleteComponent> {
   }
 
   void _resetAutoComplete() {
-    print('resetAutoComplete');
     setState(() {
       _autoCompleteController?.clear();
     });
