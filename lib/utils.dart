@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'package:http/http.dart' as http;
-
 String detectDelimiter(String text) {
   final delimiters = [",", ";", "\t"];
   var maxDelimiters = 0;
@@ -32,4 +29,28 @@ String getDelimiterCharacter(String delimiterLabel) {
       break;
   }
   return delimiterChar;
+}
+
+Set<String> getAllTypes(String csvContent, String delimiter) {
+  final lines = csvContent.split('\n');
+  final questionData = lines
+      .map((line) => line.split(delimiter).map((cell) => cell.trim()).toList())
+      .toList();
+  final types = questionData
+      .where((question) =>
+          question.length >=
+          3) // Filter out questions with less than 3 elements
+      .map((question) => question.elementAt(2))
+      .toSet()
+      .skip(1); // Skip the first element in the set
+
+  Set<String> result = new Set();
+  for (final type in types) {
+    if (questionData.where((question) => question.elementAt(2) == type).length >
+        3) {
+      result.add(type);
+    }
+  }
+  result.add('ALL');
+  return result;
 }

@@ -1,8 +1,8 @@
 import 'dart:async' show Future;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:namer_app/PlayButtons.dart';
+import 'package:http/http.dart' as http;
+import 'package:namer_app/config/ConfigComponent.dart';
 
 import 'utils.dart';
 
@@ -33,7 +33,8 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
   }
 
   Future<String> loadCSV() async {
-    return await rootBundle.loadString('assets/sample.csv');
+    final response = await http.get(Uri.parse("sample.csv"));
+    return response.body;
   }
 
   void onInput(String value) {
@@ -137,8 +138,9 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                height: 100.0, // hauteur des boutons
-                child: PlayButtons(csvContent: csvContent),
+                height: 110.0, // button padding bottom
+                child: ConfigComponent(
+                    csvContent: csvContent, allTypes: new Set()),
               ),
             ),
           ],

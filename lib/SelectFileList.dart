@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:namer_app/utils.dart';
 
-import 'PlayButtons.dart';
+import 'config/ConfigComponent.dart';
 
 class SelectFileList extends StatefulWidget {
   @override
@@ -10,6 +12,7 @@ class SelectFileList extends StatefulWidget {
 class _SelectFileListState extends State<SelectFileList> {
   int? _selectedItemId;
   String csvContent = "";
+  Set<String> allTypes = new Set();
 
   final List<Map<String, dynamic>> _items = [
     {
@@ -32,12 +35,12 @@ class _SelectFileListState extends State<SelectFileList> {
 
   Future<void> _loadFile(String fileName) async {
     try {
-      final response =
-          await DefaultAssetBundle.of(context).loadString(fileName);
+      print('trying to load file $fileName');
+      final response = await http.get(Uri.parse(fileName));
       setState(() {
-        csvContent = response;
+        csvContent = response.body;
+        allTypes = getAllTypes(csvContent, detectDelimiter(csvContent));
       });
-      //   widget.finishFileUpload(response);
     } catch (error) {
       print('Failed to load file: $error');
     }
@@ -59,7 +62,6 @@ class _SelectFileListState extends State<SelectFileList> {
                   title: Text(item['name'], style: _itemTitleTextStyle),
                   selected: _selectedItemId == item['id'],
                   onTap: () async {
-                    print('onTap');
                     setState(() {
                       _selectedItemId = item['id'];
                     });
@@ -72,8 +74,9 @@ class _SelectFileListState extends State<SelectFileList> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: 100.0, // hauteur des boutons
-              child: PlayButtons(csvContent: csvContent),
+              height: 110.0, // hauteur des boutons
+              child:
+                  ConfigComponent(csvContent: csvContent, allTypes: allTypes),
             ),
           ),
         ],

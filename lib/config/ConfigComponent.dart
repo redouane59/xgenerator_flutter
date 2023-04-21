@@ -5,21 +5,78 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:namer_app/utils.dart';
 
+import '../question/QuestionComponent.dart';
+import 'ConfigDropLists.dart';
 import 'PlayButton.dart';
-import 'QuestionComponent.dart';
 
-class PlayButtons extends StatefulWidget {
+class ConfigComponent extends StatefulWidget {
   final String csvContent;
+  final Set<String> allTypes;
 
-  PlayButtons({required this.csvContent});
+  ConfigComponent({required this.csvContent, required this.allTypes});
 
   @override
-  _PlayButtonsState createState() => _PlayButtonsState();
+  _ConfigComponentState createState() => _ConfigComponentState();
 }
 
-class _PlayButtonsState extends State<PlayButtons> {
+class _ConfigComponentState extends State<ConfigComponent> {
   String questionCount = '5';
-  List<String> questionCountOptions = ['5', '10', '20', 'ALL'];
+  String selectedType = 'ALL';
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        children: [
+          SizedBox(width: 16.0),
+          ConfigDropLists(
+            allTypes: widget.allTypes,
+            questionCountCallback: updateQuestionCount,
+            typeCallback: updateType,
+          ),
+          SizedBox(width: 16.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              PlayButton(
+                buttonText: 'Play (Quizz)',
+                isQuizz: true,
+                isEnabled: widget.csvContent.isNotEmpty,
+                onPressed: () {
+                  if (widget.csvContent.isNotEmpty) {
+                    onPlayButtonPressed(context, true);
+                  }
+                },
+              ),
+              SizedBox(width: 16.0),
+              PlayButton(
+                buttonText: 'Play (Expert)',
+                isQuizz: false,
+                isEnabled: widget.csvContent.isNotEmpty,
+                onPressed: () {
+                  if (widget.csvContent.isNotEmpty) {
+                    onPlayButtonPressed(context, false);
+                  }
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void updateQuestionCount(String newCount) {
+    setState(() {
+      questionCount = newCount;
+    });
+  }
+
+  void updateType(String newType) {
+    setState(() {
+      selectedType = newType;
+    });
+  }
 
   void showErrorDialog(BuildContext context, String errorDetails) {
     print('showErrorDialog');
@@ -53,58 +110,6 @@ class _PlayButtonsState extends State<PlayButtons> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    bool isCsvEmpty = widget.csvContent.isEmpty;
-
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          DropdownButton<String>(
-            value: questionCount,
-            onChanged: (String? newValue) {
-              if (newValue != null) {
-                setState(() {
-                  questionCount = newValue;
-                });
-              }
-            },
-            items: questionCountOptions
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          ),
-          SizedBox(width: 16.0),
-          PlayButton(
-            buttonText: 'Play (Quizz)',
-            isQuizz: true,
-            isEnabled: widget.csvContent.isNotEmpty,
-            onPressed: () {
-              if (widget.csvContent.isNotEmpty) {
-                onPlayButtonPressed(context, true);
-              }
-            },
-          ),
-          SizedBox(width: 16.0),
-          PlayButton(
-            buttonText: 'Play (Expert)',
-            isQuizz: false,
-            isEnabled: widget.csvContent.isNotEmpty,
-            onPressed: () {
-              if (widget.csvContent.isNotEmpty) {
-                onPlayButtonPressed(context, false);
-              }
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
   List<String> getAllOutputs(String csvContent, String delimiter) {
     final lines = csvContent.split('\n');
     final questionData = lines
@@ -122,10 +127,12 @@ class _PlayButtonsState extends State<PlayButtons> {
     if (kDebugMode) {
       rootUrl = 'http://localhost:8080';
     }
-    Null type = null;
-// &type=$type
     String url =
         '$rootUrl?question_count=$questionCount&delimiter=${Uri.encodeComponent(delimiter)}';
+    // @todo dirty
+    if (selectedType != "ALL") {
+      url += "&type=$selectedType";
+    }
     print('calling URL $url');
 
     try {

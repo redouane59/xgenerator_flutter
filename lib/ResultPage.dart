@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/PlayButtons.dart';
+import 'package:namer_app/config/ConfigComponent.dart';
 
-import 'QuestionComponent.dart';
 import 'main.dart';
+import 'question/QuestionComponent.dart';
 
 class ResultPage extends StatelessWidget {
   final int score;
@@ -56,7 +56,11 @@ class ResultPage extends StatelessWidget {
                 },
                 child: Text('Play (Correction)'),
               ),
-            if (!wrongQuestions.isNotEmpty) PlayButtons(csvContent: csvContent)
+            if (!wrongQuestions.isNotEmpty)
+              ConfigComponent(
+                csvContent: csvContent,
+                allTypes: new Set(),
+              )
           ],
         ),
       ),

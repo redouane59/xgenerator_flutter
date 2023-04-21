@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:namer_app/PlayButtons.dart';
+import 'package:namer_app/config/ConfigComponent.dart';
 
 class FileInputComponent extends StatefulWidget {
   @override
@@ -85,8 +85,11 @@ class _FileInputComponentState extends State<FileInputComponent> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: 100.0,
-              child: PlayButtons(csvContent: csvContent),
+              height: 110.0,
+              child: ConfigComponent(
+                csvContent: csvContent,
+                allTypes: new Set(),
+              ),
             ),
           ),
         ],

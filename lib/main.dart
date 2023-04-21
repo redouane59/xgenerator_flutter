@@ -1,10 +1,10 @@
-import 'package:dio/src/form_data.dart';
-
 import 'package:flutter/material.dart';
-import 'FreeTextComponent.dart';
+
 import 'FileInputComponent.dart';
+import 'FreeTextComponent.dart';
 import 'SelectFileList.dart';
 
+// firebase deploy --only hosting:train-mee
 void main() {
   runApp(MyApp());
 }
@@ -60,7 +60,4 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-
-
 }
-

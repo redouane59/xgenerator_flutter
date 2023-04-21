@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../ResultPage.dart';
 import 'AutocompleteComponent.dart';
 import 'PropositionButton.dart';
-import 'ResultPage.dart';
 
 class QuestionComponent extends StatefulWidget {
   final List<dynamic> questionData;
