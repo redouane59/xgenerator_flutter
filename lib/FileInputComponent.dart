@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:namer_app/config/ConfigComponent.dart';
+import 'package:namer_app/utils.dart';
 
 class FileInputComponent extends StatefulWidget {
   @override
@@ -15,6 +16,7 @@ class FileInputComponent extends StatefulWidget {
 class _FileInputComponentState extends State<FileInputComponent> {
   String csvContent = "";
   String fileName = "";
+  Set<String> allTypes = new Set();
 
   Future<void> _pickCsvFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -45,10 +47,10 @@ class _FileInputComponentState extends State<FileInputComponent> {
         // Utilisez l'encodage détecté pour convertir les bytes en chaîne de caractères
         fileContent = encoding.decode(fileBytes);
       }
-
       setState(() {
         csvContent = fileContent;
         fileName = result.files.single.name;
+        allTypes = getAllTypes(csvContent, detectDelimiter(csvContent));
       });
     } else {
       // L'utilisateur a annulé la sélection du fichier
@@ -68,7 +70,7 @@ class _FileInputComponentState extends State<FileInputComponent> {
                   ElevatedButton.icon(
                     onPressed: _pickCsvFile,
                     icon: Icon(Icons.upload_file),
-                    label: Text('Choose a CSV file'),
+                    label: Text('Upload a CSV file'),
                   ),
                   SizedBox(width: 8.0),
                   Text(
@@ -87,9 +89,9 @@ class _FileInputComponentState extends State<FileInputComponent> {
             child: Container(
               height: 110.0,
               child: ConfigComponent(
-                csvContent: csvContent,
-                allTypes: new Set(),
-              ),
+                  csvContent: csvContent,
+                  allTypes: allTypes,
+                  selectedTypeNotifier: ValueNotifier("ALL")),
             ),
           ),
         ],

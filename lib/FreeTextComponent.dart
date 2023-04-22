@@ -16,6 +16,8 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
   String delimiterString = 'Comma (,)';
   List<String> delimiterItems = ['Comma (,)', 'Semicolon (;)', 'Tab (\\t)'];
   String detectedDelimiter = '';
+  Set<String> allTypes = new Set();
+  TextEditingController _textEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -23,6 +25,7 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
     loadCSV().then((value) {
       setState(() {
         csvContent = value;
+        _textEditingController.value = TextEditingValue(text: csvContent);
         detectedDelimiter = detectDelimiter(value);
         delimiterString = delimiterItems.firstWhere(
           (element) => getDelimiterCharacter(element) == detectedDelimiter,
@@ -40,6 +43,7 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
   void onInput(String value) {
     setState(() {
       csvContent = value;
+      allTypes = getAllTypes(csvContent, detectDelimiter(csvContent));
       detectedDelimiter = detectDelimiter(value);
       delimiterString = delimiterItems.firstWhere(
         (element) => getDelimiterCharacter(element) == detectedDelimiter,
@@ -57,12 +61,14 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
 
   @override
   Widget build(BuildContext context) {
+    // spécifie la direction de gauche à droite
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Center(child: Text("Paste here your own exercice data")),
             SizedBox(height: 4.0),
             Text(
               'intput,output,type(optional)',
@@ -78,32 +84,38 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
                   border: Border.all(width: 1.0, color: Colors.grey),
                   borderRadius: BorderRadius.all(Radius.circular(4.0)),
                 ),
-                child: TextField(
-                  onChanged: onInput,
-                  controller: TextEditingController(text: csvContent),
-                  maxLines: null,
-                  keyboardType: TextInputType.multiline,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Enter CSV data here',
-                    contentPadding: EdgeInsets.all(8.0),
-                  ),
+                child: Stack(
+                  children: [
+                    TextField(
+                      onChanged: onInput,
+                      controller: _textEditingController,
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Enter CSV data here',
+                        contentPadding: EdgeInsets.all(8.0),
+                      ),
+                      textDirection: TextDirection.ltr,
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: IconButton(
+                        onPressed: clearContent,
+                        icon: Icon(Icons.delete),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
             SizedBox(height: 4.0),
             Center(
-              child: Row(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Delimiter',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(width: 8.0),
+                  Text('Delimiter'),
                   DropdownButton<String>(
                     value: delimiterString,
                     onChanged: (String? newValue) {
@@ -120,18 +132,6 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
                       },
                     ).toList(),
                   ),
-                  SizedBox(width: 16.0),
-                  ElevatedButton(
-                    onPressed: clearContent,
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                      ),
-                    ),
-                    child: Text('CLEAR'),
-                  ),
                 ],
               ),
             ),
@@ -140,7 +140,9 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
               child: Container(
                 height: 110.0, // button padding bottom
                 child: ConfigComponent(
-                    csvContent: csvContent, allTypes: new Set()),
+                    csvContent: csvContent,
+                    allTypes: allTypes,
+                    selectedTypeNotifier: ValueNotifier("ALL")),
               ),
             ),
           ],

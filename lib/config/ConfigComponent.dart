@@ -12,8 +12,12 @@ import 'PlayButton.dart';
 class ConfigComponent extends StatefulWidget {
   final String csvContent;
   final Set<String> allTypes;
+  final ValueNotifier<String> selectedTypeNotifier;
 
-  ConfigComponent({required this.csvContent, required this.allTypes});
+  ConfigComponent(
+      {required this.csvContent,
+      required this.allTypes,
+      required this.selectedTypeNotifier});
 
   @override
   _ConfigComponentState createState() => _ConfigComponentState();
@@ -24,7 +28,31 @@ class _ConfigComponentState extends State<ConfigComponent> {
   String selectedType = 'ALL';
 
   @override
+  void initState() {
+    super.initState();
+    widget.selectedTypeNotifier.addListener(_updateSelectedType);
+  }
+
+  @override
+  void dispose() {
+    widget.selectedTypeNotifier.removeListener(_updateSelectedType);
+    super.dispose();
+  }
+
+  void _updateSelectedType() {
+    setState(() {
+      selectedType = widget.selectedTypeNotifier.value;
+      print('set state $selectedType');
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+/*    if (widget.allTypes.length < 2) {
+      setState(() {
+        selectedType = 'ALL';
+      });
+    }*/
     return Center(
       child: Column(
         children: [
@@ -129,6 +157,7 @@ class _ConfigComponentState extends State<ConfigComponent> {
     }
     String url =
         '$rootUrl?question_count=$questionCount&delimiter=${Uri.encodeComponent(delimiter)}';
+
     // @todo dirty
     if (selectedType != "ALL") {
       url += "&type=$selectedType";

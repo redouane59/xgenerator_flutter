@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/config/ConfigComponent.dart';
 
 import 'main.dart';
 import 'question/QuestionComponent.dart';
@@ -26,7 +25,7 @@ class ResultPage extends StatelessWidget {
           children: [
             Text(
               'Score: $score / $questionCount',
-              style: TextStyle(fontSize: 24),
+              style: TextStyle(fontSize: 36),
             ),
             SizedBox(height: 16),
             ElevatedButton(
@@ -56,11 +55,11 @@ class ResultPage extends StatelessWidget {
                 },
                 child: Text('Play (Correction)'),
               ),
-            if (!wrongQuestions.isNotEmpty)
+/*            if (wrongQuestions.isEmpty)
               ConfigComponent(
                 csvContent: csvContent,
                 allTypes: new Set(),
-              )
+              )*/
           ],
         ),
       ),

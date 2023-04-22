@@ -52,7 +52,7 @@ class _ConfigBar extends State<ConfigDropLists> {
                 ],
               ),
               SizedBox(width: 16.0),
-              if (widget.allTypes.isNotEmpty)
+              if (widget.allTypes.length > 1)
                 Column(
                   children: [
                     Text("Types"),

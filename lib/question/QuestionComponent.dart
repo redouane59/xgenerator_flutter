@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../ResultPage.dart';
+import '../main.dart';
 import 'AutocompleteComponent.dart';
 import 'PropositionButton.dart';
 
@@ -127,44 +128,58 @@ class _QuestionComponentState extends State<QuestionComponent> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        LinearProgressIndicator(
-          value: (currentQuestionIndex + 1) / widget.questionData.length,
-        ),
-        SizedBox(
-          height: 16.0,
-        ),
-        Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '${getCurrentQuestionData()['expected_word']['input']} ?',
-                style: TextStyle(
-                  fontSize: 34.0,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: 26.0,
-              ),
-              widget.isQuizz
-                  ? PropositionButton(
-                      propositions: getPropositions(),
-                      getCurrentQuestionData: getCurrentQuestionData,
-                      buttonColors: buttonColors,
-                      checkAnswer: checkAnswer)
-                  : AutocompleteComponent(
-                      autocompleteItems: widget.allOuputs,
-                      getCurrentQuestionData: getCurrentQuestionData,
-                      checkAnswer: checkAnswer,
-                      onSkip: skipQuestion),
-            ],
+    return Scaffold(
+      body: Column(
+        children: <Widget>[
+          LinearProgressIndicator(
+            value: (currentQuestionIndex + 1) / widget.questionData.length,
+            minHeight: 10,
           ),
-        ),
-      ],
+          SizedBox(
+            height: 16.0,
+          ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '${getCurrentQuestionData()['expected_word']['input']} ?',
+                  style: TextStyle(
+                    fontSize: 34.0,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: 26.0,
+                ),
+                widget.isQuizz
+                    ? PropositionButton(
+                        propositions: getPropositions(),
+                        getCurrentQuestionData: getCurrentQuestionData,
+                        buttonColors: buttonColors,
+                        checkAnswer: checkAnswer)
+                    : AutocompleteComponent(
+                        autocompleteItems: widget.allOuputs,
+                        getCurrentQuestionData: getCurrentQuestionData,
+                        checkAnswer: checkAnswer,
+                        onSkip: skipQuestion),
+              ],
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => MyApp()),
+            (Route<dynamic> route) => false,
+          );
+        },
+        child: Icon(Icons.close),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
   }
 }
