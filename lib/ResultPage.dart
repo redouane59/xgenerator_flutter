@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'config/ConfigComponent.dart';
 import 'main.dart';
 import 'question/QuestionComponent.dart';
 
@@ -55,11 +56,11 @@ class ResultPage extends StatelessWidget {
                 },
                 child: Text('Play (Correction)'),
               ),
-/*            if (wrongQuestions.isEmpty)
+            if (wrongQuestions.isEmpty)
               ConfigComponent(
-                csvContent: csvContent,
-                allTypes: new Set(),
-              )*/
+                  csvContent: csvContent,
+                  allTypes: new Set(),
+                  selectedTypeNotifier: ValueNotifier("ALL"))
           ],
         ),
       ),

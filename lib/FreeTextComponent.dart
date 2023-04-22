@@ -1,4 +1,5 @@
 import 'dart:async' show Future;
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -7,25 +8,27 @@ import 'package:namer_app/config/ConfigComponent.dart';
 import 'utils.dart';
 
 class FreeTextComponent extends StatefulWidget {
+  final String csvContent;
+  final Function updateCSVContent;
+
+  FreeTextComponent({required this.csvContent, required this.updateCSVContent});
+
   @override
   _FreeTextComponentState createState() => _FreeTextComponentState();
 }
 
 class _FreeTextComponentState extends State<FreeTextComponent> {
-  String csvContent = '';
   String delimiterString = 'Comma (,)';
   List<String> delimiterItems = ['Comma (,)', 'Semicolon (;)', 'Tab (\\t)'];
   String detectedDelimiter = '';
   Set<String> allTypes = new Set();
-  TextEditingController _textEditingController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     loadCSV().then((value) {
       setState(() {
-        csvContent = value;
-        _textEditingController.value = TextEditingValue(text: csvContent);
+        widget.updateCSVContent(value);
         detectedDelimiter = detectDelimiter(value);
         delimiterString = delimiterItems.firstWhere(
           (element) => getDelimiterCharacter(element) == detectedDelimiter,
@@ -36,14 +39,14 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
   }
 
   Future<String> loadCSV() async {
-    final response = await http.get(Uri.parse("sample.csv"));
-    return response.body;
+    final response = await http.get(Uri.parse("algerian basics.csv"));
+    return utf8.decode(response.bodyBytes);
   }
 
   void onInput(String value) {
     setState(() {
-      csvContent = value;
-      allTypes = getAllTypes(csvContent, detectDelimiter(csvContent));
+      widget.updateCSVContent(value);
+      allTypes = getAllTypes(value, detectDelimiter(value));
       detectedDelimiter = detectDelimiter(value);
       delimiterString = delimiterItems.firstWhere(
         (element) => getDelimiterCharacter(element) == detectedDelimiter,
@@ -54,7 +57,7 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
 
   void clearContent() {
     setState(() {
-      csvContent = '';
+      widget.updateCSVContent('');
       detectedDelimiter = '';
     });
   }
@@ -88,7 +91,14 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
                   children: [
                     TextField(
                       onChanged: onInput,
-                      controller: _textEditingController,
+                      controller: TextEditingController.fromValue(
+                        TextEditingValue(
+                          text: widget.csvContent,
+                          selection: TextSelection.fromPosition(
+                            TextPosition(offset: widget.csvContent.length),
+                          ),
+                        ),
+                      ),
                       maxLines: null,
                       keyboardType: TextInputType.multiline,
                       decoration: InputDecoration(
@@ -140,7 +150,7 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
               child: Container(
                 height: 110.0, // button padding bottom
                 child: ConfigComponent(
-                    csvContent: csvContent,
+                    csvContent: widget.csvContent,
                     allTypes: allTypes,
                     selectedTypeNotifier: ValueNotifier("ALL")),
               ),

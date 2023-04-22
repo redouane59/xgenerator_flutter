@@ -23,6 +23,7 @@ dependencies:
   path_provider: ^2.0.2
   english_words: ^4.0.0
   provider: ^6.0.0
+  csv: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -33,7 +34,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - web/sample.csv
-    - web/algerian_full.csv
-    - web/sample.csv
-    - web/algerian_full.csv
+    - web/algerian basics.csv
+    - web/algerian darja.csv
