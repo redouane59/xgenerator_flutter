@@ -3,13 +3,14 @@ import 'dart:convert';
 
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:namer_app/utils.dart';
 
 import 'FileInputComponent.dart';
 import 'FreeTextComponent.dart';
 
+// flutter build web
+// firebase deploy --only hosting:train-mee
 void main() {
   runApp(MyApp());
 }
@@ -26,6 +27,7 @@ class _MyAppState extends State<MyApp> {
   List<String> files = [];
   List<String> types = [];
   String _csvContent = '';
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -40,35 +42,50 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _loadAssetFiles() async {
-    final manifestContent = await rootBundle.loadString('AssetManifest.json');
-    final Map<String, dynamic> manifestMap = json.decode(manifestContent);
-    final assetFiles = manifestMap.keys
-        .where((String key) => key.startsWith('web/') && key.endsWith('.csv'))
-        .map((e) => e.replaceAll('web/', '').replaceAll('.csv', ''))
-        .toList();
+    List<String> knownAssetFileNames = [
+      'algerian basics.csv',
+      'algerian darja.csv'
+    ];
 
+    List<String> assetFiles = [];
+    for (String fileName in knownAssetFileNames) {
+      final response = await http.get(Uri.parse(fileName));
+
+      if (response.statusCode == 200) {
+        assetFiles.add(fileName);
+      } else {
+        print('Failed to load content from file: $fileName');
+      }
+    }
+
+    if (assetFiles.isEmpty) {
+      print('no files found !');
+    }
     setState(() {
       files = assetFiles;
     });
   }
 
   Future<void> _loadCsvTypes(String fileName) async {
-    final response = await http.get(Uri.parse('web/$fileName.csv'));
+    final response = await http.get(Uri.parse(fileName));
     if (response.statusCode == 200) {
       final csvContent = response.body;
       final delimiter = detectDelimiter(csvContent);
       final allTypes = getAllTypes(csvContent, delimiter);
 
+      print('types found : $allTypes');
+
       setState(() {
         types = allTypes.toList();
       });
     } else {
-      print('Failed to load types from file: $fileName.csv');
+      print('Failed to load types from file: $fileName');
     }
   }
 
   Future<void> _loadCsvContent(String fileName, String type) async {
-    final response = await http.get(Uri.parse('web/$fileName.csv'));
+    print('loadCSVContent');
+    final response = await http.get(Uri.parse('$fileName'));
 
     if (response.statusCode == 200) {
       final csvContent = utf8.decode(response.bodyBytes);
@@ -95,7 +112,7 @@ class _MyAppState extends State<MyApp> {
         _activeTabIndex = 0; // Change to the FreeTextComponent tab
       });
     } else {
-      print('Failed to load content from file: $fileName.csv');
+      print('Failed to load content from file: $fileName');
     }
   }
 
@@ -104,6 +121,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       initialRoute: '/',
       home: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text('Train Me!'),
         ),
@@ -165,12 +183,19 @@ class _MyAppState extends State<MyApp> {
               icon: Icon(Icons.upload_file),
               label: 'Import a CSV file',
             ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.travel_explore_rounded),
+              label: 'Browse existing exercises',
+            ),
           ],
           currentIndex: _activeTabIndex,
           onTap: (int index) {
             setState(() {
               _activeTabIndex = index;
             });
+            if (index == 2) {
+              _scaffoldKey.currentState!.openDrawer();
+            }
           },
         ),
         body: IndexedStack(
@@ -178,7 +203,9 @@ class _MyAppState extends State<MyApp> {
           children: [
             FreeTextComponent(
                 csvContent: _csvContent, updateCSVContent: updateCSVContent),
-            FileInputComponent()
+            FileInputComponent(),
+            FreeTextComponent(
+                csvContent: _csvContent, updateCSVContent: updateCSVContent),
           ],
         ),
       ),
