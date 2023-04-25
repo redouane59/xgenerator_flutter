@@ -46,8 +46,10 @@ Set<String> getAllTypes(String csvContent, String delimiter) {
 
   Set<String> result = new Set();
   for (final type in types) {
-    if (questionData.where((question) => question.elementAt(2) == type).length >
-        3) {
+    if (questionData.any((question) =>
+        question.length > 2 &&
+        question.elementAt(2) == type &&
+        question.elementAt(2) != null)) {
       result.add(type);
     }
   }

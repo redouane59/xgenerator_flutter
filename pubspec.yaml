@@ -36,3 +36,4 @@ flutter:
   assets:
     - web/algerian basics.csv
     - web/algerian darja.csv
+    - web/country capitals.csv

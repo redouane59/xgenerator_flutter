@@ -44,7 +44,8 @@ class _MyAppState extends State<MyApp> {
   Future<void> _loadAssetFiles() async {
     List<String> knownAssetFileNames = [
       'algerian basics.csv',
-      'algerian darja.csv'
+      'algerian darja.csv',
+      'country capitals.csv'
     ];
 
     List<String> assetFiles = [];
@@ -89,7 +90,9 @@ class _MyAppState extends State<MyApp> {
 
     if (response.statusCode == 200) {
       final csvContent = utf8.decode(response.bodyBytes);
-      final rows = const CsvToListConverter().convert(csvContent);
+      String delimiter = detectDelimiter(csvContent);
+      final converter = CsvToListConverter(fieldDelimiter: delimiter);
+      final rows = converter.convert(csvContent);
       var filteredRows;
       if (type != 'ALL') {
         filteredRows = rows
