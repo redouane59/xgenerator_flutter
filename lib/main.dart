@@ -103,6 +103,7 @@ class _MyAppState extends State<MyApp> {
       } else {
         filteredRows = rows.where((row) => row.length > 1).toList();
       }
+
       final filteredCsvContent =
           const ListToCsvConverter().convert(filteredRows);
       if (filteredCsvContent.isEmpty) {
@@ -203,7 +204,9 @@ class _MyAppState extends State<MyApp> {
           index: _activeTabIndex,
           children: [
             FreeTextComponent(
-                csvContent: _csvContent, updateCSVContent: updateCSVContent),
+              csvContent: _csvContent,
+              updateCSVContent: updateCSVContent,
+            ),
             FileInputComponent(),
             FreeTextComponent(
                 csvContent: _csvContent, updateCSVContent: updateCSVContent),

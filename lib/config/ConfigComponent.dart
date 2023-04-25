@@ -96,7 +96,11 @@ class _ConfigComponentState extends State<ConfigComponent> {
 
   void updateQuestionCount(String newCount) {
     setState(() {
-      questionCount = newCount;
+      if (newCount == "ALL") {
+        questionCount = "-1"; // generate all questions
+      } else {
+        questionCount = newCount;
+      }
     });
   }
 
@@ -155,6 +159,7 @@ class _ConfigComponentState extends State<ConfigComponent> {
     if (kDebugMode) {
       rootUrl = 'http://localhost:8080';
     }
+
     String url =
         '$rootUrl?question_count=$questionCount&delimiter=${Uri.encodeComponent(delimiter)}';
 
@@ -191,7 +196,7 @@ class _ConfigComponentState extends State<ConfigComponent> {
   void onPlayButtonPressed(BuildContext context, bool isQuizz) async {
     String delimiter = detectDelimiter(widget.csvContent);
     final jsonResponse = await callApi(context, widget.csvContent, delimiter);
-    if (jsonResponse != null) {
+    if (jsonResponse != null && jsonResponse["questions"].length > 0) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -203,6 +208,8 @@ class _ConfigComponentState extends State<ConfigComponent> {
           ),
         ),
       );
+    } else {
+      print('error, API jsonResponse was null or empty');
     }
   }
 }

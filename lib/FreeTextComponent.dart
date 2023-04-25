@@ -76,7 +76,7 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
             Center(child: Text("Paste here your own exercice data")),
             SizedBox(height: 4.0),
             Text(
-              'intput,output,type(optional)',
+              'question,answer,type(optional)',
               style: TextStyle(
                 fontSize: 12.0,
                 fontWeight: FontWeight.bold,
