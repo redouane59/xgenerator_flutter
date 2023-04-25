@@ -26,16 +26,18 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
   @override
   void initState() {
     super.initState();
-    loadCSV().then((value) {
-      setState(() {
-        widget.updateCSVContent(value);
-        detectedDelimiter = detectDelimiter(value);
-        delimiterString = delimiterItems.firstWhere(
-          (element) => getDelimiterCharacter(element) == detectedDelimiter,
-          orElse: () => delimiterString,
-        );
+    if (widget.csvContent.isEmpty) {
+      loadCSV().then((value) {
+        setState(() {
+          widget.updateCSVContent(value);
+          detectedDelimiter = detectDelimiter(value);
+          delimiterString = delimiterItems.firstWhere(
+            (element) => getDelimiterCharacter(element) == detectedDelimiter,
+            orElse: () => delimiterString,
+          );
+        });
       });
-    });
+    }
   }
 
   Future<String> loadCSV() async {

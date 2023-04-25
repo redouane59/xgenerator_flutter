@@ -173,7 +173,8 @@ class _QuestionComponentState extends State<QuestionComponent> {
         onPressed: () {
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => MyApp()),
+            MaterialPageRoute(
+                builder: (context) => MyApp(csvContent: widget.csvContent)),
             (Route<dynamic> route) => false,
           );
         },

@@ -12,26 +12,29 @@ import 'FreeTextComponent.dart';
 // flutter build web
 // firebase deploy --only hosting:train-mee
 void main() {
-  runApp(MyApp());
+  runApp(MyApp(csvContent: ''));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  String csvContent;
+
+  MyApp({required this.csvContent});
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  String _csvContent = '';
   int _activeTabIndex = 0;
   List<String> files = [];
   List<String> types = [];
-  String _csvContent = '';
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    _csvContent = widget.csvContent;
     _loadAssetFiles();
   }
 
@@ -95,15 +98,10 @@ class _MyAppState extends State<MyApp> {
       final rows = converter.convert(csvContent);
       var filteredRows;
       if (type != 'ALL') {
-        filteredRows = rows
-            .where((row) => row.length > 2 && row[2] == type)
-            .map((row) => row.sublist(0, 2))
-            .toList();
+        filteredRows =
+            rows.where((row) => row.length > 2 && row[2] == type).toList();
       } else {
-        filteredRows = rows
-            .where((row) => row.length > 1)
-            .map((row) => row.sublist(0, 2))
-            .toList();
+        filteredRows = rows.where((row) => row.length > 1).toList();
       }
       final filteredCsvContent =
           const ListToCsvConverter().convert(filteredRows);

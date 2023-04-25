@@ -17,6 +17,13 @@ class ResultPage extends StatelessWidget {
     required this.csvContent,
   });
 
+  void _onBackHomePressed(BuildContext context) {
+    Navigator.popUntil(
+        context,
+        ModalRoute.withName(
+            '/home')); // Remplacez '/home' par le nom de votre route de la page d'accueil
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +40,8 @@ class ResultPage extends StatelessWidget {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => MyApp()),
+                  MaterialPageRoute(
+                      builder: (context) => MyApp(csvContent: csvContent)),
                 );
               },
               child: Text('Back Home'),
