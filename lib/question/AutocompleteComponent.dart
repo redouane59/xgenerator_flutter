@@ -33,6 +33,25 @@ class _AutocompleteComponentState extends State<AutocompleteComponent> {
     });
   }
 
+  String removeDiacritics(String text) {
+    return text
+        .replaceAll('à', 'a')
+        .replaceAll('â', 'a')
+        .replaceAll('ä', 'a')
+        .replaceAll('é', 'e')
+        .replaceAll('è', 'e')
+        .replaceAll('ê', 'e')
+        .replaceAll('ë', 'e')
+        .replaceAll('î', 'i')
+        .replaceAll('ï', 'i')
+        .replaceAll('ô', 'o')
+        .replaceAll('ö', 'o')
+        .replaceAll('ù', 'u')
+        .replaceAll('û', 'u')
+        .replaceAll('ü', 'u')
+        .replaceAll('ç', 'c');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -47,9 +66,8 @@ class _AutocompleteComponentState extends State<AutocompleteComponent> {
                     return const Iterable<String>.empty();
                   }
                   return widget.autocompleteItems.where((String option) {
-                    return option
-                        .toLowerCase()
-                        .contains(textEditingValue.text.toLowerCase());
+                    return removeDiacritics(option.toLowerCase()).contains(
+                        removeDiacritics(textEditingValue.text.toLowerCase()));
                   });
                 },
                 onSelected: (String selection) {
