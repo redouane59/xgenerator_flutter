@@ -18,7 +18,7 @@ class ConfigDropLists extends StatefulWidget {
 class _ConfigBar extends State<ConfigDropLists> {
   String questionCount = '5';
   String selectedType = 'ALL';
-  List<String> questionCountOptions = ['5', '10', '20', 'ALL'];
+  List<String> questionCountOptions = ['5', '10', '20', '40'];
 
   @override
   Widget build(BuildContext context) {
@@ -28,30 +28,47 @@ class _ConfigBar extends State<ConfigDropLists> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Column(
-                children: [
-                  Text("nb Questions"),
-                  DropdownButton<String>(
-                    value: questionCount,
-                    onChanged: (String? newValue) {
-                      if (newValue != null) {
-                        setState(() {
-                          questionCount = newValue;
-                          widget.questionCountCallback(questionCount);
-                        });
-                      }
-                    },
-                    items: questionCountOptions
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ],
+              Flexible(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "nb Questions",
+                      textAlign: TextAlign.center,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: DropdownButton<String>(
+                        value: questionCount,
+                        onChanged: (String? newValue) {
+                          if (newValue != null) {
+                            setState(() {
+                              questionCount = newValue;
+                              widget.questionCountCallback(questionCount);
+                            });
+                          }
+                        },
+                        isExpanded: true,
+                        // Permet d'élargir la liste déroulante pour qu'elle prenne toute la largeur disponible
+                        items: questionCountOptions
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Align(
+                              // Envelopper le contenu dans un Align pour le centrer
+                              alignment: Alignment.center,
+                              child: Text(
+                                value,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(width: 16.0),
               if (widget.allTypes.length > 1)
                 Column(
                   children: [

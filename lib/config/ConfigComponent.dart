@@ -26,6 +26,7 @@ class ConfigComponent extends StatefulWidget {
 class _ConfigComponentState extends State<ConfigComponent> {
   String questionCount = '5';
   String selectedType = 'ALL';
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -44,54 +45,6 @@ class _ConfigComponentState extends State<ConfigComponent> {
       selectedType = widget.selectedTypeNotifier.value;
       print('set state $selectedType');
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-/*    if (widget.allTypes.length < 2) {
-      setState(() {
-        selectedType = 'ALL';
-      });
-    }*/
-    return Center(
-      child: Column(
-        children: [
-          SizedBox(width: 16.0),
-          ConfigDropLists(
-            allTypes: widget.allTypes,
-            questionCountCallback: updateQuestionCount,
-            typeCallback: updateType,
-          ),
-          SizedBox(width: 16.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              PlayButton(
-                buttonText: 'Play (Quizz)',
-                isQuizz: true,
-                isEnabled: widget.csvContent.isNotEmpty,
-                onPressed: () {
-                  if (widget.csvContent.isNotEmpty) {
-                    onPlayButtonPressed(context, true);
-                  }
-                },
-              ),
-              SizedBox(width: 16.0),
-              PlayButton(
-                buttonText: 'Play (Expert)',
-                isQuizz: false,
-                isEnabled: widget.csvContent.isNotEmpty,
-                onPressed: () {
-                  if (widget.csvContent.isNotEmpty) {
-                    onPlayButtonPressed(context, false);
-                  }
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
   }
 
   void updateQuestionCount(String newCount) {
@@ -157,7 +110,7 @@ class _ConfigComponentState extends State<ConfigComponent> {
     String rootUrl =
         'https://us-central1-dz-dialect-api.cloudfunctions.net/generate-question-function';
     if (kDebugMode) {
-      rootUrl = 'http://localhost:8080';
+      //     rootUrl = 'http://localhost:8080';
     }
 
     String url =
@@ -168,6 +121,9 @@ class _ConfigComponentState extends State<ConfigComponent> {
       url += "&type=$selectedType";
     }
     print('calling URL $url');
+    setState(() {
+      isLoading = true;
+    });
 
     try {
       final request = http.MultipartRequest('POST', Uri.parse(url));
@@ -182,14 +138,15 @@ class _ConfigComponentState extends State<ConfigComponent> {
       if (response.statusCode != 200) {
         final errorData = json.decode(await response.stream.bytesToString());
         showErrorDialog(context, errorData);
-        return null;
       }
       final jsonResponse = await response.stream.bytesToString();
+      isLoading = false;
       return json.decode(jsonResponse);
     } catch (error) {
       showErrorDialog(context, error.toString());
-      return null;
     }
+    isLoading = false;
+    return null;
   }
 
   // @todo bug here, is Quizz is always true even clicking on the button where it should be false
@@ -211,5 +168,57 @@ class _ConfigComponentState extends State<ConfigComponent> {
     } else {
       print('error, API jsonResponse was null or empty');
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(width: 16.0),
+              ConfigDropLists(
+                allTypes: widget.allTypes,
+                questionCountCallback: updateQuestionCount,
+                typeCallback: updateType,
+              ),
+              SizedBox(width: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  PlayButton(
+                    buttonText: 'Play (Quizz)',
+                    isQuizz: true,
+                    isEnabled: widget.csvContent.isNotEmpty,
+                    onPressed: () {
+                      if (widget.csvContent.isNotEmpty) {
+                        onPlayButtonPressed(context, true);
+                      }
+                    },
+                  ),
+                  SizedBox(width: 16.0),
+                  PlayButton(
+                    buttonText: 'Play (Expert)',
+                    isQuizz: false,
+                    isEnabled: widget.csvContent.isNotEmpty,
+                    onPressed: () {
+                      if (widget.csvContent.isNotEmpty) {
+                        onPlayButtonPressed(context, false);
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        if (isLoading)
+          Align(
+              child: CircularProgressIndicator(),
+              alignment: Alignment.topCenter),
+      ],
+    );
   }
 }

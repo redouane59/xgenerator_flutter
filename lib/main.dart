@@ -128,52 +128,67 @@ class _MyAppState extends State<MyApp> {
           title: Text('Train Me!'),
         ),
         drawer: Drawer(
-          child: ListView(
-            children: [
-              DrawerHeader(
-                decoration:
-                    BoxDecoration(color: Theme.of(context).primaryColor),
-                child: Text(
-                  'Load existing exerices',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
+          child: Builder(builder: (context) {
+            return ListView(
+              children: [
+                DrawerHeader(
+                  decoration:
+                      BoxDecoration(color: Theme.of(context).primaryColor),
+                  child: Text(
+                    'Load existing exercises',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
                   ),
                 ),
-              ),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: files.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final file = files[index];
-                  return ExpansionTile(
-                    title: Text(file),
-                    children: [
-                      for (String type in types)
-                        ListTile(
-                          title: Text(type),
-                          onTap: () {
-                            // Perform any action when the type is tapped
-                            Navigator.pop(context);
-                            _loadCsvContent(file,
-                                type); // Charger le contenu du fichier CSV
-                          },
-                        ),
-                    ],
-                    onExpansionChanged: (bool isExpanded) async {
-                      if (isExpanded) {
-                        await _loadCsvTypes(file);
-                      } else {
-                        setState(() {
-                          types = [];
-                        });
-                      }
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        for (String file in files)
+                          ExpansionTile(
+                            title: Text(file),
+                            children: [
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height / 2,
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: types.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    final type = types[index];
+                                    return ListTile(
+                                      title: Text(type),
+                                      onTap: () {
+                                        // Perform any action when the type is tapped
+                                        Navigator.pop(context);
+                                        _loadCsvContent(file,
+                                            type); // Charger le contenu du fichier CSV
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                            onExpansionChanged: (bool isExpanded) async {
+                              if (isExpanded) {
+                                await _loadCsvTypes(file);
+                              } else {
+                                setState(() {
+                                  types = [];
+                                });
+                              }
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }),
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: [

@@ -64,7 +64,6 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
     });
   }
 
-  @override
   Widget build(BuildContext context) {
     // spécifie la direction de gauche à droite
     return Scaffold(
@@ -83,7 +82,7 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
               ),
             ),
             SizedBox(height: 2.0),
-            Expanded(
+            Flexible(
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(width: 1.0, color: Colors.grey),
@@ -123,30 +122,43 @@ class _FreeTextComponentState extends State<FreeTextComponent> {
               ),
             ),
             SizedBox(height: 4.0),
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Delimiter'),
-                  DropdownButton<String>(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Delimiter',
+                  textAlign: TextAlign.center,
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: DropdownButton<String>(
                     value: delimiterString,
                     onChanged: (String? newValue) {
                       setState(() {
                         delimiterString = newValue!;
                       });
                     },
+                    isExpanded: true,
                     items: delimiterItems.map<DropdownMenuItem<String>>(
                       (String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                          child: Text(value),
+                          child: Align(
+                            // Envelopper le contenu dans un Align pour le centrer
+                            alignment: Alignment.center,
+                            child: Text(
+                              value,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                         );
                       },
                     ).toList(),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+            SizedBox(height: 20.0),
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
