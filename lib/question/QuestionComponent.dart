@@ -26,6 +26,7 @@ class QuestionComponent extends StatefulWidget {
 class _QuestionComponentState extends State<QuestionComponent> {
   int currentQuestionIndex = 0;
   int score = 0;
+  int lastFalseAnswerIndex = -1;
   Set<dynamic> wrongQuestions = new Set();
   List<Color> buttonColors = [];
   bool isWrong = false;
@@ -60,9 +61,12 @@ class _QuestionComponentState extends State<QuestionComponent> {
         showResultPage();
       }
     } else {
-      score--;
+      // to avoid loosing 2 points for the same question
+      if (lastFalseAnswerIndex != currentQuestionIndex) {
+        score--;
+      }
       wrongQuestions.add(getCurrentQuestionData());
-
+      lastFalseAnswerIndex = currentQuestionIndex;
       if (buttonIndex >= 0) {
         // Change the color of the button with the wrong answer
         setState(() {

@@ -63,7 +63,7 @@ yettefi,il éteint,verb,to review
 yabouss,il embrasse,verb,to review
 ya7i,il enlève,verb,to review
 y7at,il pose / met,verb,to review
-yatna9al,il se déplacer,verb,to review
+yatna9al,il se déplace,verb,to review
 yna9ass,il baisse / diminue,verb,to review
 yor9od,il dort,verb,to review
 yetfaham,il s'entend (avec qqun),verb,to review
@@ -99,6 +99,7 @@ yssab,il insulte,verb,to review
 yarmi,il jète,verb,to review
 ykhali,il laisse,verb,to review
 yaghssal,il lave,verb,to review
+naw9af,je me lève,verb,
 yaw9af,il se leve,verb,to review
 ye9ra,il lit / étudie,verb,to review
 yekri,il loue,verb,to review
@@ -129,7 +130,7 @@ yatmaskher,il plaisante,verb,to review
 ye9der,il peut,verb,to review
 yarfad,il porte / prend,verb,to review
 yast9awha,il prend un café,verb,to review
-yathala,il prendre soin,verb,to review
+yathala,il prend soin,verb,to review
 yalbass,il porte (un vêtement) / s'habille,verb,to review
 ylabass,il habille (qqun),verb,to review
 ywedjed,il prépare,verb,to review
@@ -180,6 +181,7 @@ ymes,il touche,verb,to review
 ya9lab,il tourne / se retourner,verb,to review
 ysib,il trouve,verb,to review
 yel9a,il trouve / retrouve,verb,to review
+nal9a,je trouve,,
 ybe3,il vend,verb,to review
 y3ich,il vit,verb,to review
 yedi,il tient / prend,verb,to review
@@ -289,6 +291,8 @@ sellek,il a sauvé / a été sauvé / a payé,verb,to review
 Khrej,il est sorti,verb,to review
 tebe3,il a suivi,verb,to review
 chedd,il a tenu,verb,to review
+l9it,j'ai trouvé / tu as trouvé,verb,
+l9a,il a trouvé,verb,
 saab,il a trouvé,verb,to review
 ja,il est venu,verb,to review
 da,il a tenu / a pris,verb,to review
@@ -616,9 +620,9 @@ barhouchin,malpoli(e)s,adjective,to review
 drif,poli,adjective,to review
 drifa,polie,adjective,to review
 draaf,poli(e)s,adjective,to review
-mrabi,courtois,adjective,to review
-mrabia,courtoise,adjective,to review
-mrabiyin,courtois(es),adjective,to review
+mrabbi,bien élevé,adjective,to review
+mrabbia,bien élevée,adjective,to review
+mrabbiyin,bien élevé(e)s,adjective,to review
 mzayet,gras,adjective,to review
 mzayta,grasse,adjective,to review
 mzaytin,gras(ses),adjective,to review
@@ -750,7 +754,7 @@ n'ar kaamel / ga3 n'ar,toute la journée,temporal,to review
 bekri,tôt,temporal,to review
 el7el,tard,temporal,to review
 mara wa7da fi,une fois par,temporal,to review
-melli,depuis,temporal,to review
+melli,depuis que,temporal,to review
 djwayeh,environ,temporal,to review
 ta3 essba7,du matin,temporal,to review
 ta3 le3chiya / ta3 elil,du soir,temporal,to review
@@ -832,7 +836,7 @@ nsibi / sheikhi,mon beau père,person,to review
 wlif,fils,person,to review
 drari,enfant,person,to review
 bent,fille (de),person,to review
-bnet,filles (de),person,to review
+bnet,filles,person,to review
 etefla,une fille,person,to review
 wlidi,mon fils,person,to review
 radjel,homme,person,to review
@@ -997,9 +1001,9 @@ zoudj mlayen,2000000,number,to review
 7al ,solution,noun,to review
 ta9a,fenêtre,home,to review
 7aal,atmosphère / climat / temps,noun,to review
-zebda ,beurre,food,to review
+zebda,beurre,food,to review
 bagra,vâche,animal,to review
-ma3djoun,configure,food,to review
+ma3djoun,confiture,food,to review
 mechmech,abricot,food,to review
 bid,oeuf,food,to review
 batta,boîte,food,to review
@@ -1080,10 +1084,12 @@ djar,voisin,person,to review
 djara,voisine,person,to review
 djiren,voisins,person,to review
 mochkel,problème,noun,to review
-mochekel,problèmes,noun,
+mochekel,problèmes,noun,to review
 serkala,circulation,noun,to review
 lam3icha,vie quotidienne,noun,to review
 lekra,location,noun,to review
+kari,locataire (h),person,to review
+karia,locataire (f),person,to review
 nos,moitié / demi,food,to review
 rbo3,quart,food,to review
 zit,huile,food,to review
@@ -1103,6 +1109,7 @@ fekya,fruits,food,to review
 7aba fekya,un fruit,food,to review
 tafa7,pomme,food,to review
 la3neb,raisin,food,to review
+zbib,raison sec,food,to review
 landjas,poire,food,to review
 9ares,citron,food,to review
 zrodiya,carotte,food,to review
@@ -1146,10 +1153,10 @@ chwa,grillade,food,to review
 les oeufs,lbid,food,to review
 ta7mima,douche,place,to review
 taswira,photo,noun,to review
-tsawer,photos,noun,
+tsawer,photos,noun,to review
 idjaba,réponse,noun,to review
 ghonia,chanson,noun,to review
-loghna,chansons,noun,
+loghna,chansons,noun,to review
 sarf,la monnaie,noun,to review
 3ars,fête du mariage,noun,to review
 far7,joie,noun,to review
@@ -1172,7 +1179,7 @@ zarbiya ta3 slat,tapis de prière,home,to review
 7kaya,histoire,noun,to review
 7afla,fête,noun,to review
 7ayawen,animal,person,to review
-7ayawenet,animaux,person,
+7ayawenet,animaux,person,to review
 wadjah,visage,body,to review
 fom,bouche,body,to review
 lard,sol,home,to review
@@ -1193,7 +1200,8 @@ moghorfa,cuillère,home,to review
 mouss,couteau,home,to review
 fourchette,forchitta,home,to review
 ttabsi,assiette,home,to review
-la3cha,dîner,temporal,to review
+la3cha,dîner,food,to review
+nafttar,je déjeûne,verb,to review
 ftour,déjeuner,temporal,to review
 9ahwa,petit déjeuner,temporal,to review
 safra,jaune,color,to review
@@ -1204,7 +1212,145 @@ zre9,bleu,color,to review
 zer9a,bleue,color,to review
 zrou9a,bleus,color,to review
 9aras,acide / citron,food,to review
-pomme de terre,batata,food,to review
+batata,pomme de terre,food,to review
 tomatich,tomate,food,to review
 djalbana,petits pois,food,to review
 loubia machto,haricots verts,food,to review
+rkhiss,bon marché (m),adjectif,to review
+rkhissa,bon marché (f),adjectif,to review
+rkhaas,bon marché (p),adjectif,to review
+3la djal,à cause,adverb,to review
+hwa,air,,to review
+beli,que,,to review
+men,depuis,,to review
+mat,il est mort,,to review
+lakbir,l'aîné,,to review
+wasttani,le garçon au milieu de la fraterie,personne,to review
+wasttania,la fille au milieu de la fraterie,personne,to review
+twam,jumeaux/jumelle,personne,to review
+9raya,les études,,to review
+qrayti,mes études,,to review
+kol wa7ed,chacun,personne,to review
+chamal,le nord,spacial,to review
+gharb,l'ouest,spacial,to review
+djanoub,le sud,,to review
+mela,donc,adverb,to review
+fi rayek,à ton avis,,to review
+fi rayi,à mon avis,,to review
+l3em louel,la première année,,to review
+be3d zoudj smenet,dans 2 semaines,temporel,to review
+be3d lioumin,dans 2 jours,,to review
+be3d tletli yem,dans 3 jours,,to review
+be3d 3achr yem,dans 10 jours,,to review
+be3d 3achrin youm,dans 20 jours,,to review
+bla ma,sans (+ verbe infinitif),,to review
+eddif,l'invité,personne,to review
+dyef,les invités,personne,to review
+fra7,il était heureux,,to review
+ttri,tendre (m),adjective,to review
+ttriya,tendre (f),adjective,to review
+yebess,dur,adjective,to review
+yebssa,dure,adjective,to review
+la3sal,le miel,food,to review
+wesh sa,qu'est-ce qui s'est passé,adverb,to review
+khassar,il a abîmé,verb,to review
+9ader,être capable (m),adjective,to review
+9adra,être capable (f),adjective,to review
+9adrin,être capables,adjective,to review
+atkheyel,imagine (m),verb,to review
+atkheylou,imaginez,verb,to review
+mazouzi,plus petit de la fraterie (benajmin),person,to review
+mazouziya,plus petit de la fraterie (benajmine),person,to review
+ya3ni,c'est à dire,adverb,to review
+kol khatra,chaque fois,adverb,to review
+lowel,le premier,adverb,to review
+lowla,la première,adverb,to review
+wa7dokhra,une autre,adverb,to review
+sma,le ciel,noun,to review
+safy,net,adjective,to review
+safya,nette,adjective,to review
+ghyma,nuage,noun,to review
+ghyoum,nuages,noun,to review
+ch7am,gras,food,to review
+mghayma,nuageuse,adjective,to review
+mghaym,nuageux,adjective,to review
+kach 7adja,quelque chose,noun,to review
+sa7abti,mon amie,person,to review
+s7aabati,mes amies,person,to review
+sa7bi,mon ami,person,to review
+s7aabi,mes amis,person,to review
+mazalni,je ai encore,verb,to review
+mazalek,tu as encore,verb,to review
+mazelou,il a encore,verb,to review
+mazelha,elle a encore,verb,to review
+mazelna,on a encore,verb,to review
+mazelkoum,vous avez encore,verb,to review
+mazelhoum,ils nont encore,verb,to review
+mazel,pas encore,temporal,to review
+ki el 3ada,comme d'habitude,temporal,to review
+namchatt,je peigne,verb,to review
+machtta,brosse à cheveux,body,to review
+cha3ri,mes cheveux,body,to review
+masrouf,argent de poche,noun,to review
+khattrat,des fois,temporal,to review
+khattra,une fois,temporal,to review
+nad3i,je prie Dieu / j'espère,verb,to review
+bihom,avec eux (objet),adverb,to review
+bih,avec lui (objet),adverb,to review
+biha,avec elle (objet),adverb,to review
+nagasro,on discute / plaisante,verb,to review
+li men,à qui,adverb,to review
+3adjbatni,ça me plaît,verb,to review
+3adjbatek,ça te plaît,verb,to review
+las9a,la colle,maison,to review
+laasa9,collé,adjective,to review
+laas9a,collée,adjective,to review
+laas9in,collé(e)s,adjective,to review
+w9aft,je me suis levé,verb,to review
+w9af,il s'est levé,verb,to review
+el 7ass,le bruit,noun,to review
+7lem,il a rêvé,verb,to review
+ta7lem,tu rêves,verb,to review
+ssalaf,j'ai prêté,verb,to review
+nassalaf,je prête,verb,to review
+la 7aadja,la chose,maison,to review
+khatem,bague,body,to review
+syagha,bijoux,body,to review
+yban,il paraît,verb,to review
+nban,je paraîs,verb,to review
+bel3ani,exprès,verb,to review
+7yat,vie,person,to review
+nakrah,je déteste,verb,to review
+yakrah,il déteste,verb,to review
+kraht,j'en ai marre,verb,to review
+krah,il en a marre,verb,to review
+war9a,une feuille,maison,to review
+ll 7adja lowla,la première chose,noun,to review
+yrabbi,il élève,verb,to review
+nrabbi,j'élève,verb,to review
+9att,chat,animal,to review
+9atta,chatte,animal,to review
+9ttotta,chats,animal,to review
+kelb,chien,animal,to review
+kelba,chienne,animal,to review
+kleb,chiens,animal,to review
+7mar,âne,animal,to review
+7mir,des ânes,animal,to review
+3oud,cheval,animal,to review
+3waad,chevaux,animal,to review
+zawach,oiseau,animal,to review
+zwawech,oiseau,animal,to review
+faar,souris,animal,to review
+gralou,carard,animal,to review
+dabana,mouche,animal,to review
+debaan,mouches,animal,to review
+nemouss,moustique,animal,to review
+nemoussa,moustiques,animal,to review
+na7la,abeille,animal,to review
+na7aal,abeilles,animal,to review
+djmal,chameau,animal,to review
+rtila,araignée,animal,to review
+,,,to review
+,,,to review
+,,,to review
+,,,to review

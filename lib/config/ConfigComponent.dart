@@ -43,7 +43,7 @@ class _ConfigComponentState extends State<ConfigComponent> {
   void _updateSelectedType() {
     setState(() {
       selectedType = widget.selectedTypeNotifier.value;
-      print('set state $selectedType');
+      //    print('set state $selectedType');
     });
   }
 

@@ -77,7 +77,7 @@ class _MyAppState extends State<MyApp> {
       final delimiter = detectDelimiter(csvContent);
       final allTypes = getAllTypes(csvContent, delimiter);
 
-      print('types found : $allTypes');
+      //    print('types found : $allTypes');
 
       setState(() {
         types = allTypes.toList();
@@ -142,48 +142,45 @@ class _MyAppState extends State<MyApp> {
                     ),
                   ),
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    child: Column(
-                      children: [
-                        for (String file in files)
-                          ExpansionTile(
-                            title: Text(file),
-                            children: [
-                              SizedBox(
-                                height: MediaQuery.of(context).size.height / 2,
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: types.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    final type = types[index];
-                                    return ListTile(
-                                      title: Text(type),
-                                      onTap: () {
-                                        // Perform any action when the type is tapped
-                                        Navigator.pop(context);
-                                        _loadCsvContent(file,
-                                            type); // Charger le contenu du fichier CSV
-                                      },
-                                    );
-                                  },
-                                ),
+                SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      for (String file in files)
+                        ExpansionTile(
+                          title: Text(file),
+                          children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height / 2,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: types.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final type = types[index];
+                                  return ListTile(
+                                    title: Text(type),
+                                    onTap: () {
+                                      // Perform any action when the type is tapped
+                                      Navigator.pop(context);
+                                      _loadCsvContent(file,
+                                          type); // Charger le contenu du fichier CSV
+                                    },
+                                  );
+                                },
                               ),
-                            ],
-                            onExpansionChanged: (bool isExpanded) async {
-                              if (isExpanded) {
-                                await _loadCsvTypes(file);
-                              } else {
-                                setState(() {
-                                  types = [];
-                                });
-                              }
-                            },
-                          ),
-                      ],
-                    ),
+                            ),
+                          ],
+                          onExpansionChanged: (bool isExpanded) async {
+                            if (isExpanded) {
+                              await _loadCsvTypes(file);
+                            } else {
+                              setState(() {
+                                types = [];
+                              });
+                            }
+                          },
+                        ),
+                    ],
                   ),
                 ),
               ],
